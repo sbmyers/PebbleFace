@@ -1,11 +1,13 @@
 #include <pebble.h>
 
-enum { ewk, esat, wwk, wsat, max_Selects };
+enum { ewk, wwk, esat, wsat, max_Selects };
 static Window *window;
 static TextLayer *text_layer;
 static TextLayer *title;
 static TextLayer *clock_layer;
+static TextLayer *junk_layer;
 static char szTime[10];
+static char szJunk[20];
 
 static time_t ebWeekdayTnP[] = {
   18000,  // 5:00
@@ -206,16 +208,25 @@ static void click_config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
 }
-static void UpdateClock()
+static void InitClock()
 {
   time_t now = time(NULL);
-  strftime(szTime,sizeof(szTime),"%H:%M",localtime(&now));
+  struct tm *pNow = localtime(&now);
+  strftime(szTime,sizeof(szTime),"%H:%M",pNow);
   text_layer_set_text(clock_layer, szTime);
+
+  if(pNow->tm_wday == 6){
+    nSelect = esat;
+  }
+  else{
+    nSelect = ewk;    
+  }
 }
 static void ticktock(struct tm *tick_time, TimeUnits units_changed)
 {
   strftime(szTime,sizeof(szTime),"%H:%M",tick_time);
   text_layer_set_text(clock_layer, szTime);
+  snprintf(szJunk, sizeof(szJunk),"%d", tick_time->tm_wday);
 }
 
 static void window_load(Window *window) {
@@ -237,12 +248,25 @@ static void window_load(Window *window) {
   clock_layer = text_layer_create((GRect) { .origin = { 0, 28 }, .size = { bounds.size.w, 40 } });
   text_layer_set_font(clock_layer, fonts_get_system_font(FONT_KEY_BITHAM_30_BLACK));
   text_layer_set_text_alignment(clock_layer, GTextAlignmentCenter);
-  
   snprintf(szTime, sizeof(szTime),"00:00");
   text_layer_set_text(clock_layer, szTime);
   layer_add_child(window_layer, text_layer_get_layer(clock_layer));
 
-  UpdateClock();
+  text_layer = text_layer_create((GRect) { .origin = { 0, 72 }, .size = { bounds.size.w, 32 } });
+  text_layer_set_font(text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+  text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
+  text_layer_set_text_color(text_layer, GColorWhite);
+  text_layer_set_background_color(text_layer, GColorBlack);
+  layer_add_child(window_layer, text_layer_get_layer(text_layer));
+  
+  junk_layer = text_layer_create((GRect) { .origin = { 0, 110 }, .size = { bounds.size.w, 30 } });
+  text_layer_set_font(junk_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+  text_layer_set_text_alignment(junk_layer, GTextAlignmentCenter);
+  layer_add_child(window_layer, text_layer_get_layer(junk_layer));
+  
+  text_layer_set_text(junk_layer, szJunk);
+
+  InitClock();
   ShowIt();
   tick_timer_service_subscribe(MINUTE_UNIT,ticktock);
 
