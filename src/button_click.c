@@ -209,12 +209,14 @@ static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
-  text_layer = text_layer_create((GRect) { .origin = { 0, 72 }, .size = { bounds.size.w, 40 } });
+  text_layer = text_layer_create((GRect) { .origin = { 0, 72 }, .size = { bounds.size.w, 25 } });
   text_layer_set_font(text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
+  text_layer_set_text_color(text_layer, GColorBlack);
+  text_layer_set_background_color(text_layer, GColorWhite);
   layer_add_child(window_layer, text_layer_get_layer(text_layer));
 
-  title = text_layer_create((GRect) { .origin = { 0, 0 }, .size = { bounds.size.w, 40 } });
+  title = text_layer_create((GRect) { .origin = { 0, 0 }, .size = { bounds.size.w, 25 } });
   text_layer_set_font(title, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_text_alignment(title, GTextAlignmentCenter);
   layer_add_child(window_layer, text_layer_get_layer(title));
@@ -222,7 +224,8 @@ static void window_load(Window *window) {
 }
 
 static void window_unload(Window *window) {
-  text_layer_destroy(text_layer);
+  text_layer_destroy(text_layer);  
+  text_layer_destroy(title);
 }
 
 static void init(void) {
