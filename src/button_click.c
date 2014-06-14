@@ -9,6 +9,37 @@ static TextLayer *junk_layer;
 static char szTime[10];
 static char szJunk[20];
 
+static char *Teams[] = {
+    "Boston",
+    "Tampa Bay",
+    "Montreal",
+    "Detroit",
+    "Ottawa",
+    "Toronto",
+    "Florida",
+    "Buffalo",
+    "Pittsburgh",
+    "NY Rangers",
+    "Philadelphia",
+    "Columbus",
+    "Washington",
+    "New Jersey",
+    "Carolina",
+    "NY Islanders",
+    "Colorado",
+    "St. Louis",
+    "Chicago",
+    "Minnesota",
+    "Nashville",
+    "Winnipeg",
+    "Anaheim",
+    "San Jose",
+    "Los Angeles",
+    "Phoenix",
+    "Vancouver",
+    "Calgary",
+    "Edmonton",  
+};
 static time_t ebWeekdayTnP[] = {
   18000,  // 5:00
   20340,  // 5:39
@@ -148,6 +179,7 @@ static time_t wbSaturdayTnP[] = {
 
 static int nActive = 0;
 static unsigned nSelect = ewk;
+static int nGame = 0;
 
 static void ShowIt(){
   time_t target = 0;
@@ -195,7 +227,8 @@ static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(text_layer, "Up");
+  //text_layer_set_text(text_layer, "Up");
+ 
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
@@ -226,7 +259,13 @@ static void ticktock(struct tm *tick_time, TimeUnits units_changed)
 {
   strftime(szTime,sizeof(szTime),"%H:%M",tick_time);
   text_layer_set_text(clock_layer, szTime);
-  snprintf(szJunk, sizeof(szJunk),"%d", tick_time->tm_wday);
+}
+
+void tapHandler(AccelAxisType axis, int32_t direction)
+{
+  snprintf(szJunk, sizeof(szJunk),"%s", Teams[nGame]);
+  text_layer_set_text(junk_layer, szJunk);
+  nGame = (nGame + 1) % (sizeof(Teams)/sizeof(Teams[0]));
 }
 
 static void window_load(Window *window) {
@@ -269,6 +308,7 @@ static void window_load(Window *window) {
   InitClock();
   ShowIt();
   tick_timer_service_subscribe(MINUTE_UNIT,ticktock);
+  accel_tap_service_subscribe(tapHandler);
 
   light_enable_interaction();
 }
