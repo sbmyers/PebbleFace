@@ -4,6 +4,8 @@ enum { ewk, esat, wwk, wsat, max_Selects };
 static Window *window;
 static TextLayer *text_layer;
 static TextLayer *title;
+static TextLayer *clock_layer;
+static char szTime[10];
 
 static time_t ebWeekdayTnP[] = {
   18000,  // 5:00
@@ -220,6 +222,14 @@ static void window_load(Window *window) {
   text_layer_set_font(title, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_text_alignment(title, GTextAlignmentCenter);
   layer_add_child(window_layer, text_layer_get_layer(title));
+  
+  clock_layer = text_layer_create((GRect) { .origin = { 0, 28 }, .size = { bounds.size.w, 40 } });
+  text_layer_set_font(clock_layer, fonts_get_system_font(FONT_KEY_BITHAM_30_BLACK));
+  text_layer_set_text_alignment(clock_layer, GTextAlignmentCenter);
+  snprintf(szTime, sizeof(szTime),"00:00");
+  text_layer_set_text(clock_layer, szTime);
+  layer_add_child(window_layer, text_layer_get_layer(clock_layer));
+
   ShowIt();
 }
 
