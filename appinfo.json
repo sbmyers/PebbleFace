@@ -1,0 +1,18 @@
+{
+    "shortName": "TRE",
+    "versionCode": 1,
+    "watchapp": {
+        "watchface": false
+    },
+    "capabilities": [
+        ""
+    ],
+    "versionLabel": "1.0",
+    "companyName": "s.myers@computer.org",
+    "longName": "TRE Schedule",
+    "appKeys": {},
+    "uuid": "379090c8-a620-47bf-b502-40cd5fde6e4f",
+    "resources": {
+        "media": []
+    }
+}
