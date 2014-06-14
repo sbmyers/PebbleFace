@@ -206,6 +206,17 @@ static void click_config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
 }
+static void UpdateClock()
+{
+  time_t now = time(NULL);
+  strftime(szTime,sizeof(szTime),"%H:%M",localtime(&now));
+  text_layer_set_text(clock_layer, szTime);
+}
+static void ticktock(struct tm *tick_time, TimeUnits units_changed)
+{
+  strftime(szTime,sizeof(szTime),"%H:%M",tick_time);
+  text_layer_set_text(clock_layer, szTime);
+}
 
 static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
@@ -226,11 +237,16 @@ static void window_load(Window *window) {
   clock_layer = text_layer_create((GRect) { .origin = { 0, 28 }, .size = { bounds.size.w, 40 } });
   text_layer_set_font(clock_layer, fonts_get_system_font(FONT_KEY_BITHAM_30_BLACK));
   text_layer_set_text_alignment(clock_layer, GTextAlignmentCenter);
+  
   snprintf(szTime, sizeof(szTime),"00:00");
   text_layer_set_text(clock_layer, szTime);
   layer_add_child(window_layer, text_layer_get_layer(clock_layer));
 
+  UpdateClock();
   ShowIt();
+  tick_timer_service_subscribe(MINUTE_UNIT,ticktock);
+
+  light_enable_interaction();
 }
 
 static void window_unload(Window *window) {
