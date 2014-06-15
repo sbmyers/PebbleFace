@@ -219,29 +219,34 @@ static int GetHour(struct tm *pTime){
 static void ShowIt(){
   time_t target = 0;
   time_t arrival = 0;
+  char *arrow = "->";
   switch (nSelect){
   case ewk:
     if (nActive > (int)(sizeof(ebWeekdayTnP) / sizeof(ebWeekdayTnP[0]))) nActive = 0;
     target = ebWeekdayTnP[nActive];
     arrival = ebWeekdayVS[nActive];
+    arrow = "->";
     text_layer_set_text(title, "T&P Weekday VS");
     break;
   case esat:
     if (nActive > (int)(sizeof(ebSaturdayTnP) / sizeof(ebSaturdayTnP[0]))) nActive = 0;
     target = ebSaturdayTnP[nActive];
     arrival = ebSaturdayVS[nActive];
+    arrow = "->";
     text_layer_set_text(title, "T&P Saturday VS");
     break;
   case wwk:
     if (nActive > (int)(sizeof(wbWeekdayVS) / sizeof(wbWeekdayVS[0]))) nActive = 0;
     target = wbWeekdayVS[nActive];
     arrival = wbWeekdayTnP[nActive];
+    arrow = "<-";
     text_layer_set_text(title, "VS Weekday T&P");
     break;
   case wsat:
     if (nActive > (int)(sizeof(wbSaturdayVS) / sizeof(wbSaturdayVS[0]))) nActive = 0;
     target = wbSaturdayVS[nActive];
     arrival = wbSaturdayTnP[nActive];
+    arrow = "<-";
     text_layer_set_text(title, "VS Saturday T&P");
     break;
   }
@@ -252,7 +257,7 @@ static void ShowIt(){
   char szTo[10];
   pTime = localtime(&arrival);
   snprintf(szTo, sizeof(szTo), "%d:%2.2d", GetHour(pTime), pTime->tm_min);
-  snprintf(szTimeOut, sizeof(szTimeOut), "%s -> (%s)", szFrom, szTo);
+  snprintf(szTimeOut, sizeof(szTimeOut), "%s %s (%s)", szFrom, arrow, szTo);
   text_layer_set_text(text_layer, szTimeOut);
 }
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
@@ -297,8 +302,6 @@ static void ticktock(struct tm *tick_time, TimeUnits units_changed)
 static void ShowGame()
 {
   struct tm *pTime = localtime(&games[nGame].startTime);
-   //strftime(szTemp, sizeof(szTemp),"%m/%d %H:%M",pTime);
-  //snprintf(szJunk,sizeof(szJunk),"%s\n%s", szTemp, games[nGame].opponent);
   snprintf(szJunk,sizeof(szJunk),"%d/%d %d:%2.2d %s\n%s", pTime->tm_mon, pTime->tm_mday, GetHour(pTime), pTime->tm_min,"pm",
            games[nGame].opponent);
   text_layer_set_text(junk_layer, szJunk);
@@ -378,6 +381,13 @@ static void CheckForGameDay()
   }
  else{
     // no game today, show next train    
+    time_t nSecsToday = Seconds(&today);
+    for(int i = 0; i < nEBTrains; ++i){
+      if(nSecsToday < schedule[i]){
+        nActive = i;
+        break;
+      }
+    }
   }
 }
 static void window_load(Window *window) {
