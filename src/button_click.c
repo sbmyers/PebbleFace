@@ -295,7 +295,6 @@ static void ticktock(struct tm *tick_time, TimeUnits units_changed)
 static void ShowGame()
 {
   struct tm *pTime = localtime(&games[nGame].startTime);
-  //snprintf(szJunk, sizeof(szJunk),"%s", games[nGame].opponent);
   char szTemp[30];
   strftime(szTemp, sizeof(szTemp),"%m/%d %H:%M",pTime);
   snprintf(szJunk,sizeof(szJunk),"%s\n%s", szTemp, games[nGame].opponent);
@@ -312,20 +311,26 @@ static void CheckForGameDay()
   struct tm today = *localtime(&now);
   // InitClock has set things to eastbound,
   // set to the next departure from TnP
-  int nTrains = 0;
+  int nEBTrains = 0;
+  int nWBTrains = 0;
   time_t *schedule = NULL;
+  time_t *arrivals = NULL;
   switch(nSelect)
   {
     case ewk:
       schedule = ebWeekdayTnP;
-      nTrains = nEBWkTnPTrains;
+      arrivals = wbWeekdayVS;
+      nEBTrains = nEBWkTnPTrains;
+      nWBTrains = nWBWkVSTrains;
       break;
     case esat:
       schedule = ebSaturdayTnP;
-      nTrains = nEBSatTnPTrains;
+      nEBTrains = nEBSatTnPTrains;
+      arrivals = wbSaturdayVS;
+      nWBTrains = nWBSatVSTrains;
       break;
   }
-  for(int i = 0; i < nTrains; ++i){
+  for(int i = 0; i < nEBTrains; ++i){
     struct tm test = *localtime(&schedule[i]);
     if((test.tm_hour >= today.tm_hour) && (test.tm_min > today.tm_min)){
       nActive = i;
@@ -349,21 +354,24 @@ static void CheckForGameDay()
     // check to see if it's before the puck drops
     time_t nSecsToday = Seconds(&today);
     if(nSecsToday < Seconds(&test)){
-      for(int i = 0; i < nTrains; ++i){
+      for(int i = 0; i < nEBTrains; ++i){
         if(nSecsToday < schedule[i]){
           nActive = i;
           break;
         }
-        
       }
     }
     else{
-      if(true){
-        
+      // get here after the puck drops
+      // find the next west bound train
+      for(int i = 0; i < nWBTrains; ++i){
+        if(nSecsToday < arrivals[i]){
+          nSelect++;  // change from east bound to westbound
+          nActive = i;
+          break;
+        }  
       }
-      
-    }
-    
+    }    
   }
 }
 static void window_load(Window *window) {
