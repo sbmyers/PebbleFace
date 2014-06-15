@@ -1,18 +1,25 @@
 {
-    "shortName": "TRE",
-    "versionCode": 1,
-    "watchapp": {
-        "watchface": false
+    "resources": {
+        "media": [
+            {
+                "type": "png",
+                "file": "images/B&W.png",
+                "name": "IMAGE_TRE_MENU",
+                "menuIcon": true
+            }
+        ]
     },
+    "versionCode": 1,
+    "shortName": "TRE",
     "capabilities": [
         ""
     ],
     "versionLabel": "1.0",
-    "companyName": "s.myers@computer.org",
     "longName": "TRE Schedule",
-    "appKeys": {},
     "uuid": "379090c8-a620-47bf-b502-40cd5fde6e4f",
-    "resources": {
-        "media": []
+    "appKeys": {},
+    "companyName": "s.myers@computer.org",
+    "watchapp": {
+        "watchface": false
     }
 }

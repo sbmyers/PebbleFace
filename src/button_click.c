@@ -60,7 +60,7 @@ static struct gameInfo{
   {1398279600, "Anaheim "}, // 4/23/2014 7:00:00 PM Anaheim 2 - Dallas 4
   {1398625200, "Anaheim "}, // 4/27/2014 7:00:00 PM Anaheim 5 - Dallas 4
 };
-
+static int nGames = (int)(sizeof(games)/sizeof(games[0]));
 static time_t ebWeekdayTnP[] = {
   18000,  // 5:00
   20340,  // 5:39
@@ -82,6 +82,7 @@ static time_t ebWeekdayTnP[] = {
   70920,  // 19:42
   78120,  // 21:42  
 };
+static int nEBWkTnPTrains = (int)(sizeof(ebWeekdayTnP)/sizeof(ebWeekdayTnP)[0]);
 static time_t ebWeekdayVS[] = {
     21000,  // 5:50
     23460,  // 6:31
@@ -103,6 +104,7 @@ static time_t ebWeekdayVS[] = {
     74100,  // 20:35
     81240,  // 22:34
 };
+static int nEBWkVSTrains = (int)(sizeof(ebWeekdayVS)/sizeof(ebWeekdayVS)[0]);
 static time_t ebSaturdayTnP[] = {
   31800,  // 8:50
   37200,  // 10:20
@@ -114,6 +116,7 @@ static time_t ebSaturdayTnP[] = {
   73200,  // 20:20
   78600,  // 21:50
 };
+static int nEBSatTnPTrains = (int)(sizeof(ebSaturdayTnP)/sizeof(ebSaturdayTnP)[0]);
 static time_t ebSaturdayVS[] = {
     34920,  // 9:42
     40320,  // 11:12
@@ -125,6 +128,7 @@ static time_t ebSaturdayVS[] = {
     76320,  // 21:12
     81720,  // 22:42
 };
+static int nEBSatVSTrains = (int)(sizeof(ebSaturdayVS)/sizeof(ebSaturdayVS)[0]);
 static time_t wbWeekdayVS[] = {
   21240,  // 5:54
   23100,  // 6:25
@@ -150,6 +154,7 @@ static time_t wbWeekdayVS[] = {
   73500,  // 20:25
   78900,  // 21:55
 };
+static int nWBWkVSTrains = (int)(sizeof(wbWeekdayVS)/sizeof(wbWeekdayVS)[0]);
 static time_t wbWeekdayTnP[] = {
     24480,  // 6:48
     26340,  // 7:19
@@ -173,6 +178,7 @@ static time_t wbWeekdayTnP[] = {
     76740,  // 21:19
     82140,  // 22:49
 };
+static int nWBWkTnPTrains = (int)(sizeof(wbWeekdayTnP)/sizeof(wbWeekdayTnP)[0]);
 static time_t wbSaturdayVS[] = {
   32100,  // 8:55
   37500,  // 10:25
@@ -184,6 +190,7 @@ static time_t wbSaturdayVS[] = {
   73500,  // 20:25
   78900,  // 21:55
 };
+static int nWBSatVSTrains = (int)(sizeof(wbSaturdayVS)/sizeof(wbSaturdayVS)[0]);
 static time_t wbSaturdayTnP[] = {
     24420,  // 6:47
     28080,  // 7:48
@@ -197,11 +204,15 @@ static time_t wbSaturdayTnP[] = {
     76800,  // 21:20
     82200,  // 22:50
 };
+static int nWBSatTnPTrains = (int)(sizeof(wbSaturdayTnP)/sizeof(wbSaturdayTnP)[0]);
 
 static int nActive = 0;
 static unsigned nSelect = ewk;
 static int nGame = 0;
 
+static time_t Seconds(struct tm *pTime){
+  return 60 * (pTime->tm_hour * 60 + pTime->tm_min);
+}
 static void ShowIt(){
   time_t target = 0;
   time_t arrival = 0;
@@ -281,8 +292,7 @@ static void ticktock(struct tm *tick_time, TimeUnits units_changed)
   strftime(szTime,sizeof(szTime),"%H:%M",tick_time);
   text_layer_set_text(clock_layer, szTime);
 }
-
-void tapHandler(AccelAxisType axis, int32_t direction)
+static void ShowGame()
 {
   struct tm *pTime = localtime(&games[nGame].startTime);
   //snprintf(szJunk, sizeof(szJunk),"%s", games[nGame].opponent);
@@ -290,9 +300,72 @@ void tapHandler(AccelAxisType axis, int32_t direction)
   strftime(szTemp, sizeof(szTemp),"%m/%d %H:%M",pTime);
   snprintf(szJunk,sizeof(szJunk),"%s\n%s", szTemp, games[nGame].opponent);
   text_layer_set_text(junk_layer, szJunk);
-  nGame = (nGame + 1) % (sizeof(games)/sizeof(games[0]));
 }
-
+void tapHandler(AccelAxisType axis, int32_t direction)
+{
+  nGame = (nGame + 1) % nGames;
+  ShowGame();
+}
+static void CheckForGameDay()
+{
+  time_t now = time(NULL);
+  struct tm today = *localtime(&now);
+  // InitClock has set things to eastbound,
+  // set to the next departure from TnP
+  int nTrains = 0;
+  time_t *schedule = NULL;
+  switch(nSelect)
+  {
+    case ewk:
+      schedule = ebWeekdayTnP;
+      nTrains = nEBWkTnPTrains;
+      break;
+    case esat:
+      schedule = ebSaturdayTnP;
+      nTrains = nEBSatTnPTrains;
+      break;
+  }
+  for(int i = 0; i < nTrains; ++i){
+    struct tm test = *localtime(&schedule[i]);
+    if((test.tm_hour >= today.tm_hour) && (test.tm_min > today.tm_min)){
+      nActive = i;
+      break;
+    }    
+  }
+  // at this point we've selected the next east bound train
+  // if we're game day, after the puck drops, look for the next westbound train
+  struct gameInfo *todaysGame = NULL;
+  struct tm test;
+  for(int i = 0; i < nGames; ++i){
+    test = *localtime(&games[i].startTime);
+    if((today.tm_mon == test.tm_mon) && (today.tm_mday == test.tm_mday)){
+      todaysGame = &games[i];
+      nGame = i;
+      break;
+    }
+  }
+  if(todaysGame){
+    // Game day!
+    // check to see if it's before the puck drops
+    time_t nSecsToday = Seconds(&today);
+    if(nSecsToday < Seconds(&test)){
+      for(int i = 0; i < nTrains; ++i){
+        if(nSecsToday < schedule[i]){
+          nActive = i;
+          break;
+        }
+        
+      }
+    }
+    else{
+      if(true){
+        
+      }
+      
+    }
+    
+  }
+}
 static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
@@ -331,7 +404,9 @@ static void window_load(Window *window) {
   text_layer_set_text(junk_layer, szJunk);
 
   InitClock();
+  CheckForGameDay();
   ShowIt();
+  ShowGame();
   tick_timer_service_subscribe(MINUTE_UNIT,ticktock);
   accel_tap_service_subscribe(tapHandler);
 
