@@ -7,39 +7,60 @@ static TextLayer *title;
 static TextLayer *clock_layer;
 static TextLayer *junk_layer;
 static char szTime[10];
-static char szJunk[20];
-
-static char *Teams[] = {
-    "Boston",
-    "Tampa Bay",
-    "Montreal",
-    "Detroit",
-    "Ottawa",
-    "Toronto",
-    "Florida",
-    "Buffalo",
-    "Pittsburgh",
-    "NY Rangers",
-    "Philadelphia",
-    "Columbus",
-    "Washington",
-    "New Jersey",
-    "Carolina",
-    "NY Islanders",
-    "Colorado",
-    "St. Louis",
-    "Chicago",
-    "Minnesota",
-    "Nashville",
-    "Winnipeg",
-    "Anaheim",
-    "San Jose",
-    "Los Angeles",
-    "Phoenix",
-    "Vancouver",
-    "Calgary",
-    "Edmonton",  
+static char szJunk[50];
+static struct gameInfo{
+  time_t startTime;
+  char *opponent;
+} games[] ={
+  {1379268000, "St Louis "}, // 9/15/2013 6:00:00 PM St Louis 6 - Dallas 5
+  {1379532600, "Florida "}, // 9/18/2013 7:30:00 PM Florida 2 - Dallas 3
+  {1380223800, "Colorado "}, // 9/26/2013 7:30:00 PM Colorado 1 - Dallas 5
+  {1380828600, "Florida "}, // 10/3/2013 7:30:00 PM Florida 4 - Dallas 2
+  {1380999600, "Washington "}, // 10/5/2013 7:00:00 PM Washington 1 - Dallas 2
+  {1382038200, "San Jose "}, // 10/17/2013 7:30:00 PM San Jose 3 - Dallas 4
+  {1382643000, "Calgary "}, // 10/24/2013 7:30:00 PM Calgary 1 - Dallas 5
+  {1382810400, "Winnipeg "}, // 10/26/2013 6:00:00 PM Winnipeg 2 - Dallas 1
+  {1383334200, "Colorado "}, // 11/1/2013 7:30:00 PM Colorado 3 - Dallas 2
+  {1384023600, "Chicago "}, // 11/9/2013 7:00:00 PM Chicago 5 - Dallas 2
+  {1385062200, "Ny Rangers "}, // 11/21/2013 7:30:00 PM Ny Rangers 3 - Dallas 2
+  {1385492400, "Anaheim "}, // 11/26/2013 7:00:00 PM Anaheim 3 - Dallas 6
+  {1385753400, "Chicago "}, // 11/29/2013 7:30:00 PM Chicago 2 - Dallas 1
+  {1385917200, "Edmonton "}, // 12/1/2013 5:00:00 PM Edmonton 3 - Dallas 2
+  {1386421200, "Philadelphia "}, // 12/7/2013 1:00:00 PM Philadelphia 1 - Dallas 5
+  {1386703800, "Chicago "}, // 12/10/2013 7:30:00 PM Chicago 6 - Dallas 2
+  {1387308600, "Colorado "}, // 12/17/2013 7:30:00 PM Colorado 2 - Dallas 3
+  {1387481400, "Vancouver "}, // 12/19/2013 7:30:00 PM Vancouver 1 - Dallas 4
+  {1388172600, "Nashville "}, // 12/27/2013 7:30:00 PM Nashville 1 - Dallas 4
+  {1388336400, "St Louis "}, // 12/29/2013 5:00:00 PM St Louis 3 - Dallas 2
+  {1388516400, "Los Angeles "}, // 12/31/2013 7:00:00 PM Los Angeles 2 - Dallas 3
+  {1388691000, "Montreal "}, // 1/2/2014 7:30:00 PM Montreal 6 - Dallas 4
+  {1388862000, "Detroit "}, // 1/4/2014 7:00:00 PM Detroit 5 - Dallas 1
+  {1389546000, "Ny Islanders "}, // 1/12/2014 5:00:00 PM Ny Islanders 4 - Dallas 2
+  {1389727800, "Edmonton "}, // 1/14/2014 7:30:00 PM Edmonton 2 - Dallas 5
+  {1389900600, "Boston "}, // 1/16/2014 7:30:00 PM Boston 4 - Dallas 2
+  {1390330800, "Minnesota "}, // 1/21/2014 7:00:00 PM Minnesota 0 - Dallas 4
+  {1390503600, "Toronto "}, // 1/23/2014 7:00:00 PM Toronto 1 - Dallas 7
+  {1390676400, "Pittsburgh "}, // 1/25/2014 7:00:00 PM Pittsburgh 0 - Dallas 3
+  {1390851000, "Colorado "}, // 1/27/2014 7:30:00 PM Colorado 4 - Dallas 3
+  {1391110200, "New Jersey "}, // 1/30/2014 7:30:00 PM New Jersey 3 - Dallas 2
+  {1391886000, "Phoenix "}, // 2/8/2014 7:00:00 PM Phoenix 1 - Dallas 2
+  {1393529400, "Carolina "}, // 2/27/2014 7:30:00 PM Carolina 1 - Dallas 4
+  {1393682400, "Tampa Bay "}, // 3/1/2014 2:00:00 PM Tampa Bay 4 - Dallas 2
+  {1393873200, "Buffalo "}, // 3/3/2014 7:00:00 PM Buffalo 2 - Dallas 3
+  {1394134200, "Vancouver "}, // 3/6/2014 7:30:00 PM Vancouver 1 - Dallas 6
+  {1394307000, "Minnesota "}, // 3/8/2014 7:30:00 PM Minnesota 3 - Dallas 4
+  {1394825400, "Calgary "}, // 3/14/2014 7:30:00 PM Calgary 4 - Dallas 3
+  {1395496800, "Ottawa "}, // 3/22/2014 2:00:00 PM Ottawa 1 - Dallas 3
+  {1395689400, "Winnipeg "}, // 3/24/2014 7:30:00 PM Winnipeg 1 - Dallas 2
+  {1396035000, "Nashville "}, // 3/28/2014 7:30:00 PM Nashville 3 - Dallas 7
+  {1396985400, "Nashville "}, // 4/8/2014 7:30:00 PM Nashville 2 - Dallas 3
+  {1397071800, "Columbus "}, // 4/9/2014 7:30:00 PM Columbus 3 - Dallas 1
+  {1397244600, "St Louis "}, // 4/11/2014 7:30:00 PM St Louis 0 - Dallas 3
+  {1398112200, "Anaheim "}, // 4/21/2014 8:30:00 PM Anaheim 0 - Dallas 3
+  {1398279600, "Anaheim "}, // 4/23/2014 7:00:00 PM Anaheim 2 - Dallas 4
+  {1398625200, "Anaheim "}, // 4/27/2014 7:00:00 PM Anaheim 5 - Dallas 4
 };
+
 static time_t ebWeekdayTnP[] = {
   18000,  // 5:00
   20340,  // 5:39
@@ -263,9 +284,13 @@ static void ticktock(struct tm *tick_time, TimeUnits units_changed)
 
 void tapHandler(AccelAxisType axis, int32_t direction)
 {
-  snprintf(szJunk, sizeof(szJunk),"%s", Teams[nGame]);
+  struct tm *pTime = localtime(&games[nGame].startTime);
+  //snprintf(szJunk, sizeof(szJunk),"%s", games[nGame].opponent);
+  char szTemp[30];
+  strftime(szTemp, sizeof(szTemp),"%m/%d %H:%M",pTime);
+  snprintf(szJunk,sizeof(szJunk),"%s\n%s", szTemp, games[nGame].opponent);
   text_layer_set_text(junk_layer, szJunk);
-  nGame = (nGame + 1) % (sizeof(Teams)/sizeof(Teams[0]));
+  nGame = (nGame + 1) % (sizeof(games)/sizeof(games[0]));
 }
 
 static void window_load(Window *window) {
@@ -279,26 +304,26 @@ static void window_load(Window *window) {
   text_layer_set_background_color(text_layer, GColorBlack);
   layer_add_child(window_layer, text_layer_get_layer(text_layer));
 
-  title = text_layer_create((GRect) { .origin = { 0, 0 }, .size = { bounds.size.w, 25 } });
+  title = text_layer_create((GRect) { .origin = { 0, 0 }, .size = { bounds.size.w, 26 } });
   text_layer_set_font(title, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_text_alignment(title, GTextAlignmentCenter);
   layer_add_child(window_layer, text_layer_get_layer(title));
   
-  clock_layer = text_layer_create((GRect) { .origin = { 0, 28 }, .size = { bounds.size.w, 40 } });
+  clock_layer = text_layer_create((GRect) { .origin = { 0, 26 }, .size = { bounds.size.w, 32 } });
   text_layer_set_font(clock_layer, fonts_get_system_font(FONT_KEY_BITHAM_30_BLACK));
   text_layer_set_text_alignment(clock_layer, GTextAlignmentCenter);
   snprintf(szTime, sizeof(szTime),"00:00");
   text_layer_set_text(clock_layer, szTime);
   layer_add_child(window_layer, text_layer_get_layer(clock_layer));
 
-  text_layer = text_layer_create((GRect) { .origin = { 0, 72 }, .size = { bounds.size.w, 32 } });
+  text_layer = text_layer_create((GRect) { .origin = { 0, 60 }, .size = { bounds.size.w, 32 } });
   text_layer_set_font(text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
   text_layer_set_text_color(text_layer, GColorWhite);
   text_layer_set_background_color(text_layer, GColorBlack);
   layer_add_child(window_layer, text_layer_get_layer(text_layer));
   
-  junk_layer = text_layer_create((GRect) { .origin = { 0, 110 }, .size = { bounds.size.w, 30 } });
+  junk_layer = text_layer_create((GRect) { .origin = { 0, 90 }, .size = { bounds.size.w, 50 } });
   text_layer_set_font(junk_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_text_alignment(junk_layer, GTextAlignmentCenter);
   layer_add_child(window_layer, text_layer_get_layer(junk_layer));
