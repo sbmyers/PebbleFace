@@ -213,6 +213,9 @@ static int nGame = 0;
 static time_t Seconds(struct tm *pTime){
   return 60 * (pTime->tm_hour * 60 + pTime->tm_min);
 }
+static int GetHour(struct tm *pTime){
+  return ((pTime->tm_hour - 1) % 12) + 1;
+}
 static void ShowIt(){
   time_t target = 0;
   time_t arrival = 0;
@@ -245,14 +248,13 @@ static void ShowIt(){
   struct tm *pTime = localtime(&target);
   static char szTimeOut[30];
   char szFrom[10];
-  strftime(szFrom, sizeof(szFrom), "%H:%M", pTime);
+  snprintf(szFrom, sizeof(szFrom), "%d:%2.2d", GetHour(pTime), pTime->tm_min);
   char szTo[10];
   pTime = localtime(&arrival);
-  strftime(szTo, sizeof(szTo), "%H:%M", pTime);
+  snprintf(szTo, sizeof(szTo), "%d:%2.2d", GetHour(pTime), pTime->tm_min);
   snprintf(szTimeOut, sizeof(szTimeOut), "%s -> (%s)", szFrom, szTo);
   text_layer_set_text(text_layer, szTimeOut);
 }
-
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   nSelect = (nSelect + 1) % max_Selects;
   ShowIt();
@@ -289,15 +291,16 @@ static void InitClock()
 }
 static void ticktock(struct tm *tick_time, TimeUnits units_changed)
 {
-  strftime(szTime,sizeof(szTime),"%H:%M",tick_time);
+  snprintf(szTime,sizeof(szTime),"%d:%2.2d %s",GetHour(tick_time), tick_time->tm_min,tick_time->tm_hour > 11 ? "pm" : "am");
   text_layer_set_text(clock_layer, szTime);
 }
 static void ShowGame()
 {
   struct tm *pTime = localtime(&games[nGame].startTime);
-  char szTemp[30];
-  strftime(szTemp, sizeof(szTemp),"%m/%d %H:%M",pTime);
-  snprintf(szJunk,sizeof(szJunk),"%s\n%s", szTemp, games[nGame].opponent);
+   //strftime(szTemp, sizeof(szTemp),"%m/%d %H:%M",pTime);
+  //snprintf(szJunk,sizeof(szJunk),"%s\n%s", szTemp, games[nGame].opponent);
+  snprintf(szJunk,sizeof(szJunk),"%d/%d %d:%2.2d %s\n%s", pTime->tm_mon, pTime->tm_mday, GetHour(pTime), pTime->tm_min,"pm",
+           games[nGame].opponent);
   text_layer_set_text(junk_layer, szJunk);
 }
 void tapHandler(AccelAxisType axis, int32_t direction)
@@ -371,7 +374,10 @@ static void CheckForGameDay()
           break;
         }  
       }
-    }    
+    }
+  }
+ else{
+    // no game today, show next train    
   }
 }
 static void window_load(Window *window) {
