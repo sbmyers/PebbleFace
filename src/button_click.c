@@ -12,54 +12,48 @@ static struct gameInfo{
   time_t startTime;
   char *opponent;
 } games[] ={
-  {1379268000, "St Louis "}, // 9/15/2013 6:00:00 PM St Louis 6 - Dallas 5
-  {1379532600, "Florida "}, // 9/18/2013 7:30:00 PM Florida 2 - Dallas 3
-  {1380223800, "Colorado "}, // 9/26/2013 7:30:00 PM Colorado 1 - Dallas 5
-  {1380828600, "Florida "}, // 10/3/2013 7:30:00 PM Florida 4 - Dallas 2
-  {1380999600, "Washington "}, // 10/5/2013 7:00:00 PM Washington 1 - Dallas 2
-  {1382038200, "San Jose "}, // 10/17/2013 7:30:00 PM San Jose 3 - Dallas 4
-  {1382643000, "Calgary "}, // 10/24/2013 7:30:00 PM Calgary 1 - Dallas 5
-  {1382810400, "Winnipeg "}, // 10/26/2013 6:00:00 PM Winnipeg 2 - Dallas 1
-  {1383334200, "Colorado "}, // 11/1/2013 7:30:00 PM Colorado 3 - Dallas 2
-  {1384023600, "Chicago "}, // 11/9/2013 7:00:00 PM Chicago 5 - Dallas 2
-  {1385062200, "Ny Rangers "}, // 11/21/2013 7:30:00 PM Ny Rangers 3 - Dallas 2
-  {1385492400, "Anaheim "}, // 11/26/2013 7:00:00 PM Anaheim 3 - Dallas 6
-  {1385753400, "Chicago "}, // 11/29/2013 7:30:00 PM Chicago 2 - Dallas 1
-  {1385917200, "Edmonton "}, // 12/1/2013 5:00:00 PM Edmonton 3 - Dallas 2
-  {1386421200, "Philadelphia "}, // 12/7/2013 1:00:00 PM Philadelphia 1 - Dallas 5
-  {1386703800, "Chicago "}, // 12/10/2013 7:30:00 PM Chicago 6 - Dallas 2
-  {1387308600, "Colorado "}, // 12/17/2013 7:30:00 PM Colorado 2 - Dallas 3
-  {1387481400, "Vancouver "}, // 12/19/2013 7:30:00 PM Vancouver 1 - Dallas 4
-  {1388172600, "Nashville "}, // 12/27/2013 7:30:00 PM Nashville 1 - Dallas 4
-  {1388336400, "St Louis "}, // 12/29/2013 5:00:00 PM St Louis 3 - Dallas 2
-  {1388516400, "Los Angeles "}, // 12/31/2013 7:00:00 PM Los Angeles 2 - Dallas 3
-  {1388691000, "Montreal "}, // 1/2/2014 7:30:00 PM Montreal 6 - Dallas 4
-  {1388862000, "Detroit "}, // 1/4/2014 7:00:00 PM Detroit 5 - Dallas 1
-  {1389546000, "Ny Islanders "}, // 1/12/2014 5:00:00 PM Ny Islanders 4 - Dallas 2
-  {1389727800, "Edmonton "}, // 1/14/2014 7:30:00 PM Edmonton 2 - Dallas 5
-  {1389900600, "Boston "}, // 1/16/2014 7:30:00 PM Boston 4 - Dallas 2
-  {1390330800, "Minnesota "}, // 1/21/2014 7:00:00 PM Minnesota 0 - Dallas 4
-  {1390503600, "Toronto "}, // 1/23/2014 7:00:00 PM Toronto 1 - Dallas 7
-  {1390676400, "Pittsburgh "}, // 1/25/2014 7:00:00 PM Pittsburgh 0 - Dallas 3
-  {1390851000, "Colorado "}, // 1/27/2014 7:30:00 PM Colorado 4 - Dallas 3
-  {1391110200, "New Jersey "}, // 1/30/2014 7:30:00 PM New Jersey 3 - Dallas 2
-  {1391886000, "Phoenix "}, // 2/8/2014 7:00:00 PM Phoenix 1 - Dallas 2
-  {1393529400, "Carolina "}, // 2/27/2014 7:30:00 PM Carolina 1 - Dallas 4
-  {1393682400, "Tampa Bay "}, // 3/1/2014 2:00:00 PM Tampa Bay 4 - Dallas 2
-  {1393873200, "Buffalo "}, // 3/3/2014 7:00:00 PM Buffalo 2 - Dallas 3
-  {1394134200, "Vancouver "}, // 3/6/2014 7:30:00 PM Vancouver 1 - Dallas 6
-  {1394307000, "Minnesota "}, // 3/8/2014 7:30:00 PM Minnesota 3 - Dallas 4
-  {1394825400, "Calgary "}, // 3/14/2014 7:30:00 PM Calgary 4 - Dallas 3
-  {1395496800, "Ottawa "}, // 3/22/2014 2:00:00 PM Ottawa 1 - Dallas 3
-  {1395689400, "Winnipeg "}, // 3/24/2014 7:30:00 PM Winnipeg 1 - Dallas 2
-  {1396035000, "Nashville "}, // 3/28/2014 7:30:00 PM Nashville 3 - Dallas 7
-  {1396985400, "Nashville "}, // 4/8/2014 7:30:00 PM Nashville 2 - Dallas 3
-  {1397071800, "Columbus "}, // 4/9/2014 7:30:00 PM Columbus 3 - Dallas 1
-  {1397244600, "St Louis "}, // 4/11/2014 7:30:00 PM St Louis 0 - Dallas 3
-  {1398112200, "Anaheim "}, // 4/21/2014 8:30:00 PM Anaheim 0 - Dallas 3
-  {1398279600, "Anaheim "}, // 4/23/2014 7:00:00 PM Anaheim 2 - Dallas 4
-  {1398625200, "Anaheim "}, // 4/27/2014 7:00:00 PM Anaheim 5 - Dallas 4
-};
+  {1412883000, "Chicago "}, // 10/9/2014 7:30:00 PM Chicago at Dallas
+  {1413658800, "Philadelphia "}, // 10/18/2014 7:00:00 PM Philadelphia at Dallas
+  {1413919800, "Vancouver "}, // 10/21/2014 7:30:00 PM Vancouver at Dallas
+  {1414524600, "St Louis "}, // 10/28/2014 7:30:00 PM St Louis at Dallas
+  {1414783800, "Anaheim "}, // 10/31/2014 7:30:00 PM Anaheim at Dallas
+  {1415129400, "Los Angeles "}, // 11/4/2014 7:30:00 PM Los Angeles at Dallas
+  {1415302200, "Nashville "}, // 11/6/2014 7:30:00 PM Nashville at Dallas
+  {1415473200, "San Jose "}, // 11/8/2014 7:00:00 PM San Jose at Dallas
+  {1416056400, "Minnesota "}, // 11/15/2014 1:00:00 PM Minnesota at Dallas
+  {1416339000, "Carolina "}, // 11/18/2014 7:30:00 PM Carolina at Dallas
+  {1416511800, "Arizona "}, // 11/20/2014 7:30:00 PM Arizona at Dallas
+  {1416682800, "Los Angeles "}, // 11/22/2014 7:00:00 PM Los Angeles at Dallas
+  {1416943800, "Edmonton "}, // 11/25/2014 7:30:00 PM Edmonton at Dallas
+  {1417203000, "Minnesota "}, // 11/28/2014 7:30:00 PM Minnesota at Dallas
+  {1417888800, "Montreal "}, // 12/6/2014 6:00:00 PM Montreal at Dallas
+  {1418153400, "Winnipeg "}, // 12/9/2014 7:30:00 PM Winnipeg at Dallas
+  {1418499000, "New Jersey "}, // 12/13/2014 7:30:00 PM New Jersey at Dallas
+  {1419357600, "Toronto "}, // 12/23/2014 6:00:00 PM Toronto at Dallas
+  {1419881400, "Ny Rangers "}, // 12/29/2014 7:30:00 PM Ny Rangers at Dallas
+  {1420054200, "Arizona "}, // 12/31/2014 7:30:00 PM Arizona at Dallas
+  {1420311600, "Minnesota "}, // 1/3/2015 7:00:00 PM Minnesota at Dallas
+  {1420572600, "Columbus "}, // 1/6/2015 7:30:00 PM Columbus at Dallas
+  {1421177400, "Ottawa "}, // 1/13/2015 7:30:00 PM Ottawa at Dallas
+  {1421350200, "Winnipeg "}, // 1/15/2015 7:30:00 PM Winnipeg at Dallas
+  {1421521200, "Washington "}, // 1/17/2015 7:00:00 PM Washington at Dallas
+  {1421782200, "Boston "}, // 1/20/2015 7:30:00 PM Boston at Dallas
+  {1422991800, "Colorado "}, // 2/3/2015 7:30:00 PM Colorado at Dallas
+  {1423164600, "Tampa Bay "}, // 2/5/2015 7:30:00 PM Tampa Bay at Dallas
+  {1423855800, "Florida "}, // 2/13/2015 7:30:00 PM Florida at Dallas
+  {1424374200, "San Jose "}, // 2/19/2015 7:30:00 PM San Jose at Dallas
+  {1424545200, "Detroit "}, // 2/21/2015 7:00:00 PM Detroit at Dallas
+  {1425065400, "Colorado "}, // 2/27/2015 7:30:00 PM Colorado at Dallas
+  {1425236400, "Anaheim "}, // 3/1/2015 7:00:00 PM Anaheim at Dallas
+  {1425411000, "Ny Islanders "}, // 3/3/2015 7:30:00 PM Ny Islanders at Dallas
+  {1426438800, "St Louis "}, // 3/15/2015 5:00:00 PM St Louis at Dallas
+  {1426793400, "Pittsburgh "}, // 3/19/2015 7:30:00 PM Pittsburgh at Dallas
+  {1426964400, "Chicago "}, // 3/21/2015 7:00:00 PM Chicago at Dallas
+  {1427139000, "Buffalo "}, // 3/23/2015 7:30:00 PM Buffalo at Dallas
+  {1427743800, "Calgary "}, // 3/30/2015 7:30:00 PM Calgary at Dallas
+  {1428089400, "St Louis "}, // 4/3/2015 7:30:00 PM St Louis at Dallas
+  {1428778800, "Nashville "}, // 4/11/2015 7:00:00 PM Nashville at Dallas
+  };
 static int nGames = (int)(sizeof(games)/sizeof(games[0]));
 static time_t ebWeekdayTnP[] = {
   18000,  // 5:00
@@ -302,7 +296,7 @@ static void ticktock(struct tm *tick_time, TimeUnits units_changed)
 static void ShowGame()
 {
   struct tm *pTime = localtime(&games[nGame].startTime);
-  snprintf(szJunk,sizeof(szJunk),"%d/%d %d:%2.2d %s\n%s", pTime->tm_mon, pTime->tm_mday, GetHour(pTime), pTime->tm_min,"pm",
+  snprintf(szJunk,sizeof(szJunk),"%d/%d %d:%2.2d %s\n%s", pTime->tm_mon+1, pTime->tm_mday, GetHour(pTime), pTime->tm_min,"pm",
            games[nGame].opponent);
   text_layer_set_text(junk_layer, szJunk);
 }
