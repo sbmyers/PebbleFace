@@ -12,6 +12,9 @@ static struct gameInfo{
   time_t startTime;
   char *opponent;
 } games[] ={
+  {1411414200, "St Louis "}, // 9/22/2014 7:30:00 PM St Louis at Dallas
+  {1412019000, "Florida "}, // 9/29/2014 7:30:00 PM Florida at Dallas
+  {1412105400, "Tampa Bay "}, // 9/30/2014 7:30:00 PM Tampa Bay at Dallas
   {1412883000, "Chicago "}, // 10/9/2014 7:30:00 PM Chicago at Dallas
   {1413658800, "Philadelphia "}, // 10/18/2014 7:00:00 PM Philadelphia at Dallas
   {1413919800, "Vancouver "}, // 10/21/2014 7:30:00 PM Vancouver at Dallas
@@ -53,7 +56,7 @@ static struct gameInfo{
   {1427743800, "Calgary "}, // 3/30/2015 7:30:00 PM Calgary at Dallas
   {1428089400, "St Louis "}, // 4/3/2015 7:30:00 PM St Louis at Dallas
   {1428778800, "Nashville "}, // 4/11/2015 7:00:00 PM Nashville at Dallas
-  };
+    };
 static int nGames = (int)(sizeof(games)/sizeof(games[0]));
 static time_t ebWeekdayTnP[] = {
   18000,  // 5:00
