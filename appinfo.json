@@ -4,21 +4,17 @@
         ""
     ],
     "companyName": "s.myers@computer.org",
-    "longName": "TRE Schedule",
+    "longName": "Stars",
     "projectType": "native",
     "resources": {
-        "media": [
-            {
-                "file": "images/B&W.png",
-                "menuIcon": true,
-                "name": "IMAGE_TRE_MENU",
-                "type": "png"
-            }
-        ]
+        "media": []
     },
-    "shortName": "TRE",
-    "uuid": "379090c8-a620-47bf-b502-40cd5fde6e4f",
-    "versionCode": 1,
+    "sdkVersion": "3",
+    "shortName": "Stars",
+    "targetPlatforms": [
+        "basalt"
+    ],
+    "uuid": "0e3a1f6c-2f2b-4cb4-b8d6-41f1f063f15e",
     "versionLabel": "1.0",
     "watchapp": {
         "watchface": false
