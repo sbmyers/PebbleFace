@@ -4,12 +4,13 @@
 
 static Window *window;
 static Layer *s_simple_bg_layer, *s_date_layer, *s_hands_layer;
-static TextLayer *s_day_label, *s_num_label;
+static TextLayer *s_num_label;
 
 static GPath *s_tick_paths[NUM_CLOCK_TICKS];
 static GPath *s_minute_arrow, *s_hour_arrow;
 static char s_num_buffer[4], s_day_buffer[6];
 static GPath *Star[4];
+static GPath *HiLites[6];
 
 static void bg_update_proc(Layer *layer, GContext *ctx) {
   graphics_context_set_fill_color(ctx, GColorKellyGreen);
@@ -22,6 +23,11 @@ static void bg_update_proc(Layer *layer, GContext *ctx) {
   gpath_draw_filled(ctx, Star[2]);
   graphics_context_set_fill_color(ctx, GColorBlack);
   gpath_draw_filled(ctx, Star[3]);
+  graphics_context_set_fill_color(ctx, GColorLightGray);
+  for(int i = 0; i < 6; ++i){
+    gpath_draw_filled(ctx, HiLites[i]);
+  }
+  
   graphics_context_set_fill_color(ctx, GColorWhite);
   for (int i = 0; i < NUM_CLOCK_TICKS; ++i) {
     gpath_draw_filled(ctx, s_tick_paths[i]);
@@ -89,17 +95,9 @@ static void window_load(Window *window) {
   layer_set_update_proc(s_date_layer, date_update_proc);
   layer_add_child(window_layer, s_date_layer);
 
-  //s_day_label = text_layer_create(GRect(46, 114, 27, 20));
-  //text_layer_set_text(s_day_label, s_day_buffer);
-  //text_layer_set_background_color(s_day_label, GColorBlack);
-  //text_layer_set_text_color(s_day_label, GColorWhite);
-  //text_layer_set_font(s_day_label, fonts_get_system_font(FONT_KEY_GOTHIC_18));
-
-  //layer_add_child(s_date_layer, text_layer_get_layer(s_day_label));
-
-  s_num_label = text_layer_create(GRect(73, 114, 18, 20));
+  s_num_label = text_layer_create(GRect(110, 124, 18, 20));
   text_layer_set_text(s_num_label, s_num_buffer);
-  text_layer_set_background_color(s_num_label, GColorBlack);
+  text_layer_set_background_color(s_num_label, GColorKellyGreen);
   text_layer_set_text_color(s_num_label, GColorWhite);
   text_layer_set_font(s_num_label, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
 
@@ -148,6 +146,12 @@ static void init() {
   Star[1] = gpath_create(&FillBlack);
   Star[2] = gpath_create(&FillWhite);
   Star[3] = gpath_create(&FillCenter);
+  HiLites[0] = gpath_create(&HiLite0);
+  HiLites[1] = gpath_create(&HiLite1);
+  HiLites[2] = gpath_create(&HiLite2);
+  HiLites[3] = gpath_create(&HiLite3);
+  HiLites[4] = gpath_create(&HiLite4);
+  HiLites[5] = gpath_create(&HiLite5);
   tick_timer_service_subscribe(SECOND_UNIT, handle_second_tick);
 }
 
