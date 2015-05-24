@@ -146,12 +146,10 @@ static void init() {
   Star[1] = gpath_create(&FillBlack);
   Star[2] = gpath_create(&FillWhite);
   Star[3] = gpath_create(&FillCenter);
-  HiLites[0] = gpath_create(&HiLite0);
-  HiLites[1] = gpath_create(&HiLite1);
-  HiLites[2] = gpath_create(&HiLite2);
-  HiLites[3] = gpath_create(&HiLite3);
-  HiLites[4] = gpath_create(&HiLite4);
-  HiLites[5] = gpath_create(&HiLite5);
+  for(int i = 0; i < 6; ++i){
+    HiLites[i] = gpath_create(&HiLitePts[i]);
+  }
+ 
   tick_timer_service_subscribe(SECOND_UNIT, handle_second_tick);
 }
 
